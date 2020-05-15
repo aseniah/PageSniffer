@@ -12,6 +12,7 @@ namespace PageSniffer
 {
     class Program
     {
+        internal static string DATETIME_FORMAT = "M/d/yy h:mm:ss tt";
         internal static PushoverOptions pushoverOptions;
 
         static void Main(string[] args)
@@ -44,10 +45,10 @@ namespace PageSniffer
 
                         // Set next run
                         page.NextRun = DateTime.Now.AddSeconds(psConfiguration.PeriodInSeconds).AddSeconds(variation);
-                        Console.WriteLine($"Next Run: {page.NextRun}");
+                        WriteToConsole($"Next Run: {page.NextRun.ToString(DATETIME_FORMAT)}");
                     }
                 }
-                //Console.WriteLine("Loop ...");
+                //WriteToConsole("Loop ...");
                 Thread.Sleep(10000);
             }
         }
@@ -55,12 +56,12 @@ namespace PageSniffer
         private static void CheckPage(HtmlWeb web, WebPage page)
         {
             Console.WriteLine();
-            Console.WriteLine($"Loading webpage ... {page.Name}");
+            WriteToConsole($"Loading webpage ... {page.Name}");
             var htmlDoc = web.Load(page.Url);
 
             // Show page title
             //var title = htmlDoc.DocumentNode.SelectSingleNode("//head/title");
-            //Console.WriteLine($"{title.InnerHtml}");
+            //WriteToConsole($"{title.InnerHtml}");
 
             // Find cart button and output
             var htmlNodes = htmlDoc.DocumentNode.SelectNodes(page.NodePath);
@@ -68,7 +69,7 @@ namespace PageSniffer
             {
                 if (node.OuterHtml.Contains(page.NodeFilter))
                 {
-                    Console.WriteLine($"Result: {RemoveHTMLTags(node.InnerHtml)}");
+                    WriteToConsole($"Result: {RemoveHTMLTags(node.InnerHtml)}");
                     if (node.InnerHtml.ToLower().Contains(page.AlertTrigger.ToLower()))
                     {
                         if (!page.AlertActive)
@@ -87,7 +88,7 @@ namespace PageSniffer
                             {
                                 foreach (var error in response.Errors)
                                 {
-                                    Console.WriteLine($"Pushover Error: {error}");
+                                    WriteToConsole($"Pushover Error: {error}");
                                 }
                             }
                         }
@@ -108,7 +109,7 @@ namespace PageSniffer
                             {
                                 foreach (var error in response.Errors)
                                 {
-                                    Console.WriteLine($"Pushover Error: {error}");
+                                    WriteToConsole($"Pushover Error: {error}");
                                 }
                             }
                         }
@@ -116,6 +117,11 @@ namespace PageSniffer
                     }
                 }
             }
+        }
+
+        private static void WriteToConsole(string text)
+        {
+            Console.WriteLine($"[{DateTime.Now.ToString(DATETIME_FORMAT)}] {text}");
         }
 
         private static string RemoveHTMLTags(string value)
