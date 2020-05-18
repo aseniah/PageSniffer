@@ -79,7 +79,7 @@ namespace PageSniffer
                             // Send alert
                             Pushover pclient = new Pushover(pushoverOptions.AppKey);
                             PushResponse response = pclient.Push(
-                                $"[PageSniffer] Item available! 🎉",
+                                $"[PageSniffer] ✅ Item available!",
                                 $"{page.Name}\n{page.Url}",
                                 pushoverOptions.UserKey
                             );
@@ -100,7 +100,7 @@ namespace PageSniffer
                             // Send alert
                             Pushover pclient = new Pushover(pushoverOptions.AppKey);
                             PushResponse response = pclient.Push(
-                                $"[PageSniffer] No longer available 😢",
+                                $"[PageSniffer] ❌ Not available",
                                 $"{page.Name}\n{page.Url}",
                                 pushoverOptions.UserKey
                             );
