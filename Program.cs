@@ -13,6 +13,9 @@ namespace PageSniffer
     class Program
     {
         internal static string DATETIME_FORMAT = "M/d/yy h:mm:ss tt";
+        internal static string NOTIFICATION_TITLE = "[PageSniffer]";
+        internal static string ITEM_AVAILABLE = "✅ Item available!";
+        internal static string ITEM_NOT_AVAILABLE = "❌ Not available";
         internal static PushoverOptions pushoverOptions;
 
         static void Main(string[] args)
@@ -72,47 +75,14 @@ namespace PageSniffer
                     WriteToConsole($"Result: {node.InnerText}");
                     if (node.InnerHtml.ToLower().Contains(page.AlertTrigger.ToLower()))
                     {
-                        if (!page.AlertActive)
-                        {
-                            page.AlertActive = true;
-
-                            // Send alert
-                            Pushover pclient = new Pushover(pushoverOptions.AppKey);
-                            PushResponse response = pclient.Push(
-                                $"[PageSniffer] ✅ Item available!",
-                                $"{page.Name}\n{page.Url}",
-                                pushoverOptions.UserKey
-                            );
-
-                            if (response.Errors != null && response.Errors.Any())
-                            {
-                                foreach (var error in response.Errors)
-                                {
-                                    WriteToConsole($"Pushover Error: {error}");
-                                }
-                            }
-                        }
+                        // Item is available
+                        if (!page.AlertActive) SendNoti(page, ITEM_AVAILABLE);
+                        page.AlertActive = true;
                     }
                     else
                     {
-                        if (page.AlertActive)
-                        {
-                            // Send alert
-                            Pushover pclient = new Pushover(pushoverOptions.AppKey);
-                            PushResponse response = pclient.Push(
-                                $"[PageSniffer] ❌ Not available",
-                                $"{page.Name}\n{page.Url}",
-                                pushoverOptions.UserKey
-                            );
-
-                            if (response.Errors != null && response.Errors.Any())
-                            {
-                                foreach (var error in response.Errors)
-                                {
-                                    WriteToConsole($"Pushover Error: {error}");
-                                }
-                            }
-                        }
+                        // Item is NOT available
+                        if (page.AlertActive) SendNoti(page, ITEM_NOT_AVAILABLE);
                         page.AlertActive = false;
                     }
                 }
@@ -122,6 +92,25 @@ namespace PageSniffer
         private static void WriteToConsole(string text)
         {
             Console.WriteLine($"[{DateTime.Now.ToString(DATETIME_FORMAT)}] {text}");
+        }
+
+        private static void SendNoti(WebPage page, string title)
+        {
+            // Send alert
+            Pushover pclient = new Pushover(pushoverOptions.AppKey);
+            PushResponse response = pclient.Push(
+                $"{NOTIFICATION_TITLE} {title}",
+                $"{page.Name}\n{page.Url}",
+                pushoverOptions.UserKey
+            );
+
+            if (response.Errors != null && response.Errors.Any())
+            {
+                foreach (var error in response.Errors)
+                {
+                    WriteToConsole($"Pushover Error: {error}");
+                }
+            }
         }
 
         private static string RemoveHTMLTags(string value)
