@@ -48,7 +48,7 @@ namespace PageSniffer
 
                         // Set next run
                         page.NextRun = DateTime.Now.AddSeconds(psConfiguration.PeriodInSeconds).AddSeconds(variation);
-                        WriteToConsole($"Next Run: {page.NextRun.ToString(DATETIME_FORMAT)}");
+                        //WriteToConsole($"Next Run: {page.NextRun.ToString(DATETIME_FORMAT)}");
                     }
                 }
                 //WriteToConsole("Loop ...");
@@ -58,8 +58,8 @@ namespace PageSniffer
 
         private static void CheckPage(HtmlWeb web, WebPage page)
         {
-            Console.WriteLine();
-            WriteToConsole($"Loading webpage ... {page.Name}");
+            //Console.WriteLine();
+            //WriteToConsole($"Loading webpage ... {page.Name}");
             var htmlDoc = web.Load(page.Url);
 
             // Show page title
@@ -72,18 +72,35 @@ namespace PageSniffer
             {
                 if (node.OuterHtml.Contains(page.NodeFilter))
                 {
-                    WriteToConsole($"Result: {node.InnerText}");
+                    //WriteToConsole($"Result: {node.InnerText}");
                     if (node.InnerHtml.ToLower().Contains(page.AlertTrigger.ToLower()))
                     {
                         // Item is available
-                        if (!page.AlertActive) SendNoti(page, ITEM_AVAILABLE);
+                        if (!page.AlertActive)
+                        {
+                            // Log and notify on status change
+                            WriteToConsole($"{page.Name} ... {ITEM_AVAILABLE}");
+                            SendNoti(page, ITEM_AVAILABLE);
+                        }
                         page.AlertActive = true;
                     }
                     else
                     {
                         // Item is NOT available
-                        if (page.AlertActive) SendNoti(page, ITEM_NOT_AVAILABLE);
+                        if (page.AlertActive)
+                        {
+                            // Log and notify on status change
+                            WriteToConsole($"{page.Name} ... {ITEM_NOT_AVAILABLE}");
+                            SendNoti(page, ITEM_NOT_AVAILABLE);
+                        }
                         page.AlertActive = false;
+                    }
+
+                    // Log for new result and add to known
+                    if (!page.KnownResults.Contains(node.InnerText))
+                    {
+                        page.KnownResults.Add(node.InnerText);
+                        WriteToConsole($"New Result: {page.Name} --- {node.InnerText}");
                     }
                 }
             }

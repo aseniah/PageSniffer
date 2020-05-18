@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 
 namespace PageSniffer.Models
 {
@@ -13,5 +14,11 @@ namespace PageSniffer.Models
         public string AlertTrigger { get; set; }
         public bool AlertActive { get; set; }
         public DateTime NextRun { get; set; }
+        public List<string> KnownResults { get; set; }
+
+        public WebPage()
+        {
+            KnownResults = new List<string>();
+        }
     }
 }
