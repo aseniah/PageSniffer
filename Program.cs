@@ -69,7 +69,7 @@ namespace PageSniffer
             {
                 if (node.OuterHtml.Contains(page.NodeFilter))
                 {
-                    WriteToConsole($"Result: {RemoveHTMLTags(node.InnerHtml)}");
+                    WriteToConsole($"Result: {node.InnerText}");
                     if (node.InnerHtml.ToLower().Contains(page.AlertTrigger.ToLower()))
                     {
                         if (!page.AlertActive)
