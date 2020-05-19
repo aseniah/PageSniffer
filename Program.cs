@@ -51,9 +51,13 @@ namespace PageSniffer
                         CheckPage(web, page);
 
                         // Calculate random variation within percentage
-                        var range = psConfiguration.PeriodInSeconds * psConfiguration.PeriodVariationPercentage / 100;
-                        Random random = new Random();
-                        var variation = random.Next(-range, range);
+                        int variation = 0;
+                        if (psConfiguration.PeriodVariationPercentage <= 100 && psConfiguration.PeriodVariationPercentage >= 1)
+                        {
+                            var range = psConfiguration.PeriodInSeconds * psConfiguration.PeriodVariationPercentage / 100;
+                            Random random = new Random();
+                            variation = random.Next(-range, range);
+                        }
 
                         // Set next run
                         page.NextRun = DateTime.Now.AddSeconds(psConfiguration.PeriodInSeconds).AddSeconds(variation);
