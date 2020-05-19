@@ -1,6 +1,8 @@
 # PageSniffer
 Periodically check a web page for a specific value and send a [Pushover](https://pushover.net/) notification on state change.
 
+I wrote this to help me purchase a Nintendo Switch as soon as it was available at Best Buy (and it worked). As such, I've only tested it with their website over the few days it took for me to grab one while in stock. This solution may need tweaks for the specific pages you want to check.
+
 ## Configuration
 You'll find all of these settings in the `appsettings.json` file.
 
@@ -19,7 +21,7 @@ You'll find all of these settings in the `appsettings.json` file.
     "userKey": ""
 }
 ```
-* These values need to be created at https://pushover.net. You will need to create a user account to obtain a `userKey` and create an application to obtain an `appKey`. You will also want to download once of their [device clients](https://pushover.net/clients) to recieve notifications. The service is free for a short term and the [pricing](https://pushover.net/pricing) is reasonable. I've found the service to be useful in a number of other projects.
+* These values need to be created at https://pushover.net. You will need to create a user account to obtain a `userKey` and create an application to obtain an `appKey`. You will also want to download once of their [device clients](https://pushover.net/clients) to recieve notifications. The service is free for a short term and the [pricing](https://pushover.net/pricing) is reasonable. I've found the service to be useful in a number of other projects. I used the pagesniffer.png image in this project for my Pushover app icon.
 
 ```
 "webpages": [{
