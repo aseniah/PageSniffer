@@ -21,7 +21,7 @@ You'll find all of these settings in the `appsettings.json` file.
     "userKey": ""
 }
 ```
-* These values need to be created at https://pushover.net. You will need to create a user account to obtain a `userKey` and create an application to obtain an `appKey`. You will also want to download once of their [device clients](https://pushover.net/clients) to recieve notifications. The service is free for a short term and the [pricing](https://pushover.net/pricing) is reasonable. I've found the service to be useful in a number of other projects. I used the pagesniffer.png image in this project for my Pushover app icon.
+* These values need to be created at https://pushover.net. You will need to create a user account to obtain a `userKey` and create an application to obtain an `appKey`. You will also want to download one of their [device clients](https://pushover.net/clients) to recieve notifications. The service is free for a short term and the [pricing](https://pushover.net/pricing) is reasonable. I've found the service to be useful in a number of other projects. I used the pagesniffer.png image in this project for my Pushover app icon.
 
 ```
 "webpages": [{
